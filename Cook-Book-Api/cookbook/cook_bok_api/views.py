@@ -36,8 +36,9 @@ class UserRecipeViewSet(viewsets.ModelViewSet):
 
 
     def perform_create(self,serializer):
+        print(self.request.user)
         '''set the user profile to logged in user'''
-        serializer.save(user_role_profile = self.request.user)
+        serializer.save(user_profile = self.request.user)
 
 
 

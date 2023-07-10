@@ -22,9 +22,9 @@ class UserRecipeSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = models.RecipeMenu
-        fields = ('id','user_role_profile','title','description','created_on')
+        fields = ('id','user_profile','title','description','created_on')
         extra_kwargs = {
-            'user_role_profile':{
+            'user_profile':{
                 'read_only':True
             }
         }

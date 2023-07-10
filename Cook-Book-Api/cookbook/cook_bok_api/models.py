@@ -4,7 +4,6 @@ from django.contrib.auth.models import PermissionsMixin
 from django.contrib.auth.models import BaseUserManager
 from django.conf import settings
 
-
 class UserProfileManager(BaseUserManager):
     ''''Manager for user profile'''
 
@@ -27,6 +26,8 @@ class UserProfileManager(BaseUserManager):
         user = self.create_user(email,name,password)
 
         user.is_superuser = True
+        user.is_staff = True
+        user.is_active = True
         user.save(using=self._db)
 
         return user
@@ -35,12 +36,14 @@ class UserProfileManager(BaseUserManager):
 class UserProfile(AbstractBaseUser):
 
     USER_CHOICES = (
-        ('AUTHOR','1'),
-        ('ADMIN','2')
+        ('1','Author'),
+        ('2','Admin')
     )
 
     email = models.EmailField(max_length=250,unique=True)
     name = models.CharField(max_length=255)
+    is_staff = models.BooleanField(default=False)
+    is_admin = models.BooleanField(default=False)
     is_active = models.BooleanField(default=True)
     user_role = models.CharField(
         max_length=20,
@@ -72,8 +75,10 @@ class RecipeMenu(models.Model):
 
     title = models.CharField(max_length=250)
     description = models.CharField(max_length=500)
-    user_role_profile = models.ForeignKey(                        
-        settings.AUTH_USER_MODEL,
+    created_on  = models.DateTimeField(auto_now_add=True)
+    user_profile = models.ForeignKey( 
+        UserProfile,
+        unique=True,
         on_delete=models.CASCADE      
     )
 
